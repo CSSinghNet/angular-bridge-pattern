@@ -65,6 +65,16 @@ This is the dominant pattern here — classic Strategy applied to content-projec
   The forms API (abstraction: `FormControl`, `ngModel`) is decoupled from DOM/native elements via `ControlValueAccessor` (the bridge/implementation).  
   Directives like `ngModel` or `formControl` delegate to different accessors (text input, checkbox, custom components) without knowing details — exactly like our token bridges wrapper to children.
 
+  ### 3. Lightweight InjectionToken Pattern (Angular Official Best Practice)
+- **What it is**: Instead of using a heavy abstract class or concrete class directly as a DI token (which can prevent tree-shaking), we use a pure `InjectionToken<T>` — just a lightweight identifier (string description + type) with no runtime implementation attached to the token itself.  
+  Concrete classes (children) provide themselves via `{ provide: REFRESH_TOKEN, useExisting: ThisComponent }`.
+
+- **Why we chose this** (from angular.dev/guide/di/lightweight-injection-tokens):
+  - **Tree-shakable**: If a child component (e.g., Com3) is never used in the app, its entire code (including the provider) can be removed from the bundle during build (AOT/tree-shaking).
+  - **No runtime overhead**: Token is just an object reference — no class instantiation or factory unless needed.
+  - **Type-safe & flexible**: `<Refreshable>` keeps strong typing; `useExisting` aliases the child instance without creating extras.
+  - **Better than abstract class as token**: Abstract classes stay in the bundle (even if unused) because they have runtime presence. Lightweight token avoids this (official Angular recommendation for libraries/apps wanting optimal bundle size).
+
 - **Strategy vs Bridge Comparison in This Context**:
 
   | Aspect                  | Strategy Pattern Focus                  | Bridge Pattern Focus                              | In Our Implementation                     |
