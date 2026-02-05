@@ -22,7 +22,7 @@ Perfect for dashboards, tabs, cards, wizards, reusable forms, or any container t
 - **Test-friendly** — mock the token easily  
 
 ## Demo Structure
-
+```text
 src/app/shared/
 ├── refresh.token.ts               # Lightweight token + Refreshable interface
 ├── wrapper/
@@ -31,8 +31,8 @@ src/app/shared/
 │   └── com-one.component.ts          # Example child 1
 └── com-two/
 └── com-two.component.ts          # Example child 2
-text
-
+```
+---
 ## Design Patterns Used
 
 This implementation primarily follows the **Polymorphic Components** pattern (an Angular-specific flavor of the **Strategy Pattern**), while incorporating key elements of the **Bridge Pattern** for structural decoupling and independent evolution.
@@ -86,19 +86,13 @@ By leveraging `InjectionToken` + DI + content projection, we gain **Bridge Patte
      load(): void;
      refresh(): void;
    }
+   ```
 2. Create a lightweight token:
    ```ts
    export const REFRESH_TOKEN = new InjectionToken<Refreshable>('Refreshable Behavior Token');
+    ```
 
- 3. Each child provides itself:TypeScript :
+ 4. Each child provides itself:TypeScript :
 ```ts
-providers: [{ provide: REFRESH_TOKEN, useExisting: Com1Component }]
-
-
-
-
-
-
-
-
-   
+providers: [{ provide: REFRESH_TOKEN, useExisting: ComOneComponent }]
+```
